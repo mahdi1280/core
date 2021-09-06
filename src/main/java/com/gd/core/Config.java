@@ -26,6 +26,4 @@ public class Config {
         validatorFactoryBean.setValidationMessageSource(messageSource);
         return validatorFactoryBean;
     }
-
-
 }
