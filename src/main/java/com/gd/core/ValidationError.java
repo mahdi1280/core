@@ -2,65 +2,47 @@ package com.gd.core;
 
 public class ValidationError {
 
-    private String defaultMessage;
-    private String field;
-    private String rejectedValue;
-    private String code;
+    private final String defaultMessage;
+    private final String field;
+    private final String rejectedValue;
+    private final String code;
 
-    public ValidationError(String defaultMessage, String field, String rejectedValue, String code) {
+    private ValidationError(String defaultMessage, String field, String rejectedValue, String code) {
         this.defaultMessage = defaultMessage;
         this.field = field;
         this.rejectedValue = rejectedValue;
         this.code = code;
     }
 
-    public ValidationError() {
+    public static Builder builder() {
+        return new Builder();
     }
 
     public String getDefaultMessage() {
         return defaultMessage;
     }
 
-    public void setDefaultMessage(String defaultMessage) {
-        this.defaultMessage = defaultMessage;
-    }
-
     public String getField() {
         return field;
-    }
-
-    public void setField(String field) {
-        this.field = field;
     }
 
     public String getRejectedValue() {
         return rejectedValue;
     }
 
-    public void setRejectedValue(String rejectedValue) {
-        this.rejectedValue = rejectedValue;
-    }
-
     public String getCode() {
         return code;
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public static Builder builder(){
-        return new Builder();
-    }
-
-    private static class Builder{
+    static class Builder {
 
         private String defaultMessage;
         private String field;
         private String rejectedValue;
         private String code;
 
-        private Builder(){}
+        private Builder() {
+        }
 
         public Builder setDefaultMessage(String defaultMessage) {
             this.defaultMessage = defaultMessage;
@@ -82,8 +64,10 @@ public class ValidationError {
             return this;
         }
 
-        public ValidationError build(){
-            return new ValidationError(defaultMessage,field,rejectedValue,code);
+        public ValidationError build() {
+            return new ValidationError(defaultMessage, field, rejectedValue, code);
         }
+
     }
+
 }

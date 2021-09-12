@@ -5,7 +5,7 @@ import java.util.List;
 
 public class RuleException extends RuntimeException {
 
-    private List<ErrorMessage> errorMessages;
+    private final List<ErrorMessage> errorMessages;
 
     public RuleException(List<ErrorMessage> errorMessages) {
         this.errorMessages = errorMessages;

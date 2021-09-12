@@ -9,11 +9,11 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
 @AutoConfigureBefore
-public class Config {
+public class CoreConfiguration {
 
     private final MessageSource messageSource;
 
-    public Config(MessageSource messageSource) {
+    public CoreConfiguration(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
@@ -23,9 +23,10 @@ public class Config {
     }
 
     @Bean
-    public LocalValidatorFactoryBean validator(){
-        LocalValidatorFactoryBean validatorFactoryBean=new LocalValidatorFactoryBean();
+    public LocalValidatorFactoryBean validator() {
+        LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
         validatorFactoryBean.setValidationMessageSource(messageSource);
         return validatorFactoryBean;
     }
+
 }

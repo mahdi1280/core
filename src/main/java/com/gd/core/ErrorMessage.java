@@ -5,17 +5,9 @@ public class ErrorMessage {
     private final String message;
     private final String code;
 
-    public String getMessage() {
-        return message;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
     private ErrorMessage(String message, String code) {
         this.message = message;
-        this.code= code;
+        this.code = code;
     }
 
     public static ErrorMessage error(String msg) {
@@ -24,6 +16,14 @@ public class ErrorMessage {
 
     public static ErrorMessage error(String msg, String code) {
         return new ErrorMessage(msg, code);
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public String getCode() {
+        return code;
     }
 
 }
