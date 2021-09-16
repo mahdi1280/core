@@ -34,7 +34,7 @@ public class ValidationError {
         return code;
     }
 
-    static class Builder {
+    public static class Builder {
 
         private String defaultMessage;
         private String field;
