@@ -11,7 +11,7 @@ public class ErrorMessage {
     }
 
     public static ErrorMessage error(String msg) {
-        return new ErrorMessage(msg, "undefined");
+        return new ErrorMessage(msg, msg);
     }
 
     public static ErrorMessage error(String msg, String code) {
