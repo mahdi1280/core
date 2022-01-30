@@ -1,5 +1,6 @@
 package com.gd.core;
 
+
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @ControllerAdvice
@@ -26,6 +28,13 @@ public class DefaultExceptionHandler {
         for (ErrorMessage errorMessage : ruleException.getErrorMessages()) {
             errorMessages.add(ErrorMessage.error(messageSourceAccessor.getMessage(errorMessage.getMessage()), errorMessage.getCode()));
         }
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessages);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<List<ErrorMessage>> illegalArgumentExceptionException(IllegalArgumentException illegalArgumentException) {
+        List<ErrorMessage> errorMessages = new ArrayList<>(Collections.singletonList(
+                    ErrorMessage.error(messageSourceAccessor.getMessage("data.code.not.valid"),"data.code.not.valid")));
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessages);
     }
 
