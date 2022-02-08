@@ -6,8 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -56,5 +58,17 @@ public class DefaultExceptionHandler {
         List<ErrorMessage> errorMessages = new ArrayList<>();
         errorMessages.add(ErrorMessage.error(messageSourceAccessor.getMessage("exception.error"), "exception.error"));
         return ResponseEntity.ok(errorMessages);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<List<ErrorMessage>> accessDeniedExceptionHandler() {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<List<ErrorMessage>> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException h){
+        List<ErrorMessage> errorMessages=new ArrayList<>();
+        errorMessages.add(ErrorMessage.error(h.getMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessages);
     }
 }
