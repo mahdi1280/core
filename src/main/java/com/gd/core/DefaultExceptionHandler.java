@@ -12,6 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -46,7 +47,7 @@ public class DefaultExceptionHandler {
     public ResponseEntity<List<ValidationError>> bindExceptionHandler(BindException e) {
         List<ValidationError> validationErrors = new ArrayList<>();
         for (FieldError fieldError : e.getFieldErrors()) {
-            ValidationError validationError = ValidationError.builder().setCode(fieldError.getCode()).setDefaultMessage(fieldError.getDefaultMessage()).setField(fieldError.getObjectName()).setRejectedValue(String.valueOf(fieldError.getRejectedValue())).build();
+            ValidationError validationError = ValidationError.builder().setCode(fieldError.getCode()).setDefaultMessage(fieldError.getDefaultMessage()).setField(fieldError.getField()).setRejectedValue(String.valueOf(fieldError.getRejectedValue())).build();
             validationErrors.add(validationError);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationErrors);
@@ -57,7 +58,7 @@ public class DefaultExceptionHandler {
         logger.error("This thrown exception handled in default exception handler.", exception);
         List<ErrorMessage> errorMessages = new ArrayList<>();
         errorMessages.add(ErrorMessage.error(messageSourceAccessor.getMessage("exception.error"), "exception.error"));
-        return ResponseEntity.ok(errorMessages);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessages);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
