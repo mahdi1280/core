@@ -3,6 +3,7 @@ package com.gd.core;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,9 +24,12 @@ public class DefaultExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultExceptionHandler.class);
     private final MessageSourceAccessor messageSourceAccessor;
+    private final String maxSize;
 
-    public DefaultExceptionHandler(MessageSourceAccessor messageSourceAccessor) {
+    public DefaultExceptionHandler(@Value("${spring.servlet.multipart.max-file-size}") String maxSize
+            , MessageSourceAccessor messageSourceAccessor) {
         this.messageSourceAccessor = messageSourceAccessor;
+        this.maxSize = maxSize;
     }
 
     @ExceptionHandler(RuleException.class)
@@ -67,9 +71,16 @@ public class DefaultExceptionHandler {
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<List<ErrorMessage>> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException h){
-        List<ErrorMessage> errorMessages=new ArrayList<>();
+    public ResponseEntity<List<ErrorMessage>> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException h) {
+        List<ErrorMessage> errorMessages = new ArrayList<>();
         errorMessages.add(ErrorMessage.error(h.getMessage()));
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessages);
     }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<List<ErrorMessage>> maxUploadSizeExceededException(MaxUploadSizeExceededException e) {
+        List<ErrorMessage> error = Collections.singletonList(ErrorMessage.error(this.messageSourceAccessor.getMessage("upload.image.max.file.size", new Object[]{maxSize}), e.getMessage()));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
 }
