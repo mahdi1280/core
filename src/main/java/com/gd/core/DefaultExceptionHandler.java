@@ -1,6 +1,5 @@
 package com.gd.core;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +25,7 @@ public class DefaultExceptionHandler {
     private final MessageSourceAccessor messageSourceAccessor;
     private final String maxSize;
 
-    public DefaultExceptionHandler(@Value("${spring.servlet.multipart.max-file-size}") String maxSize
+    public DefaultExceptionHandler(@Value("${spring.servlet.multipart.max-file-size:1MB}") String maxSize
             , MessageSourceAccessor messageSourceAccessor) {
         this.messageSourceAccessor = messageSourceAccessor;
         this.maxSize = maxSize;
