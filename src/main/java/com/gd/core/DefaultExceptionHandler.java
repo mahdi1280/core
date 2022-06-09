@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -64,10 +63,6 @@ public class DefaultExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorMessages);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<List<ErrorMessage>> accessDeniedExceptionHandler() {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-    }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<List<ErrorMessage>> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException h) {
